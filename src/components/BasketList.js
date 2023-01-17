@@ -1,8 +1,10 @@
 import BasketListItem from "./BasketListItem";
+import {useContext} from "react";
+import {ShopContext} from "../context/context";
 
-export default function BasketList(props) {
-    const {orders = [], handleBasketShow, deleteOrder, incrementOrder, decrementOrder} = props;
-    const totalPrice = orders.reduce((sum, el) => {
+export default function BasketList() {
+    const {order, toogleBasket} = useContext(ShopContext);
+    const totalPrice = order.reduce((sum, el) => {
         return sum += el.price * el.quantity;
     }, 0);
     return (
@@ -11,14 +13,11 @@ export default function BasketList(props) {
                 <li className="collection-item active">
                     Basket
                 </li>
-                {orders.length !==0 ?
-                    orders.map((order) => (
+                {order.length !==0 ?
+                    order.map((order) => (
                         <BasketListItem
                             key={order.id}
                             {...order}
-                            deleteOrder={() => deleteOrder(order.id)}
-                            incrementOrder={() => incrementOrder(order.id)}
-                            decrementOrder={() => decrementOrder(order.id)}
                         />
                     )) :
                     <li className='collection-item'>
@@ -29,7 +28,7 @@ export default function BasketList(props) {
                     Total price: {totalPrice}<b>$</b>
                 </li>
                 <span className='collection-content'>
-                <i className='material-icons close' onClick={handleBasketShow}>close</i>
+                <i className='material-icons close' onClick={toogleBasket}>close</i>
             </span>
             </ul>
         </div>
